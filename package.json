@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "validate": "tsc",
+    "local": "npm run validate & next dev"
   },
   "dependencies": {
     "react": "^18",
