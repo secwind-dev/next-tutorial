@@ -24,60 +24,58 @@ const items = [
         name: 'Max',
         age: 25,
         salary: 17500,
-        location: 'TH'
     },
     {
         id: 2,
         name: 'Jam',
         age: 15,
         salary: 9000,
-        location: 'USA'
     },
     {
         id: 3,
         name: 'Bar',
         age: 30,
         salary: 25000,
-        location: 'EN'
     },
     {
-        id: 4,
-        name: 'Foo',
-        age: 16,
-        salary: 25000,
-        location: 'CN'
-    },
-    {
-        id: 5,
+        id: 99,
         name: 'Lisa',
         age: 27,
         salary: 35000,
-        location: 'JP'
     },
 ]
 
 
 function Page() {
+    // async function getInit() {
+    //     const payload = await https.get<User>(url)
 
+    //     const validate = dc.validateObject(payload, ['id', 'like.animal'])
+
+    //     if (validate.status !== 1) {
+    //         throw Error(validate.message)
+    //     }
+    //     setState((v) => ({ ...v, ...payload }))
+
+    // }
+
+    const x = items.map(v => v.name)
+    //    ^?
+
+
+
+
+    const [state, setState] = useState<User>({} as any)
+    // dcFindPayload(payload, ['title', 'completed'], 'function getInit')
 
     useEffect(() => {
-        // TS
-        // let & const
-        // function & arrow function
-        // loop
-        // operator
-        // functional & function component & oop
-        const loops = [
-            'for', 'forEach', 'map', 'while', 'function'
-        ]
         const number = [1, 2, 3, 4, 5]
-
-
 
     }, [])
     return (
         <>
-
+            <h1 className="name">{state.title}</h1>
+            <h3>{state.userId}</h3>
 
         </>
     )

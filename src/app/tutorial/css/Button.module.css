@@ -1,0 +1,34 @@
+/*------------------------------Box---------------------------------*/
+.box {
+    width: 500px;
+    color: white;
+    border-radius: 1rem;
+    border: 4px solid #000;
+}
+.box span {
+    color: #000;
+    font-size: 3rem;
+}
+.box button {
+    width: 100px;
+    color: white;
+    background-color: red;
+    margin-inline: auto;
+}
+
+/*-------------x----------------Box-----------------x---------------*/
+
+/*------------------------------List---------------------------------*/
+.list {
+    position: relative;
+}
+/*-------------x----------------List-----------------x---------------*/
+
+.section {
+    padding: 2px;
+    background-color: aqua;
+}
+
+.section:nth-child(odd) {
+    background-color: beige;
+}
