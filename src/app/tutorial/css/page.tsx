@@ -19,12 +19,16 @@ function Box() {
             <button
                 type="button"
                 color="blue"
+                data-status="FOO"
             >
                 BTN BLUE
             </button>
-        </div>
+
+        </div >
     )
 }
+
+
 
 function List() {
     const lists = [
@@ -40,9 +44,9 @@ function List() {
 
     return (
         <div id="list" className={styles.list}>
-            <ul >
+            <ul className='flex flex-col !gap-4' >
                 {lists.map((text, i) => (
-                    <li key={i}>{text}</li>
+                    <li id={`rung-${text}`} key={i}>{text}</li>
                 ))}
             </ul>
         </div>

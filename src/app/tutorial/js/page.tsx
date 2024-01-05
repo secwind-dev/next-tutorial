@@ -6,22 +6,27 @@ import { useState, useEffect } from 'react'
 
 type User = {
     userId: 1
-    id: 1
+    id: number
     title: 'Adam aut ManU'
     completed: false
     price: number,
     like: {
         animal: string,
-        color: string
+        color: string,
+        role: 'ADMIN' | 'USER'
     }
 }
+
+
+
+
 const url = 'https://jsonplaceholder.typicode.com/todos/1'
-const https = new ActionController()
+const op = new ActionController()
 
 const items = [
     {
         id: 1,
-        name: 'Max',
+        name: 'Lisa',
         age: 25,
         salary: 17500,
         location: 'TH'
@@ -58,19 +63,43 @@ const items = [
 
 
 function Page() {
+    // function component
+    // js,css, //   next??? vue 
+    const [state, setState] = useState<User>({} as any)
+    // dcFindPayload(payload, ['title', 'completed'], 'function getInit')
+    async function getInit() {
+        const payload = await op.get<User>(url)
+
+
+        // const validate = dc.validateObject(payload, ['id'])
+
+        // if (validate.status !== 1) {
+        //     throw Error(validate.message)
+        // }
+        setState((v) => ({ ...v, ...payload }))
+
+        console.log('payload :>> ', payload);
+
+    }
+
+    let n = 100
+
+
+    function addNumberToFive(num: number) {
+        return 5
+    }
 
 
     useEffect(() => {
-        // TS
-        // let & const
-        // function & arrow function
-        // loop
-        // operator
-        // functional & function component & oop
-        const loops = [
-            'for', 'forEach', 'map', 'while', 'function'
-        ]
-        const number = [1, 2, 3, 4, 5]
+
+
+
+
+
+
+
+
+
 
 
 
