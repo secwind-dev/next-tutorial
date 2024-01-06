@@ -2,114 +2,58 @@
 import * as dc from 'adc-directive'
 import { ActionController } from '@/actions/controller'
 import { useState, useEffect } from 'react'
-
+import { swCalendar, swCalendarBetween } from '@/oop/index'
 
 type User = {
     userId: 1
     id: number
     title: 'Adam aut ManU'
     completed: false
-    price: number,
+    price: number
     like: {
-        animal: string,
-        color: string,
+        animal: string
+        color: string
         role: 'ADMIN' | 'USER'
     }
 }
 
-
-
-
 const url = 'https://jsonplaceholder.typicode.com/todos/1'
-const op = new ActionController()
-
-const items = [
-    {
-        id: 1,
-        name: 'Lisa',
-        age: 25,
-        salary: 17500,
-        location: 'TH'
-    },
-    {
-        id: 2,
-        name: 'Jam',
-        age: 15,
-        salary: 9000,
-        location: 'USA'
-    },
-    {
-        id: 3,
-        name: 'Bar',
-        age: 30,
-        salary: 25000,
-        location: 'EN'
-    },
-    {
-        id: 4,
-        name: 'Foo',
-        age: 16,
-        salary: 25000,
-        location: 'CN'
-    },
-    {
-        id: 5,
-        name: 'Lisa',
-        age: 27,
-        salary: 35000,
-        location: 'JP'
-    },
-]
-
+const https = new ActionController()
 
 function Page() {
-    // function component
-    // js,css, //   next??? vue 
-    const [state, setState] = useState<User>({} as any)
-    // dcFindPayload(payload, ['title', 'completed'], 'function getInit')
-    async function getInit() {
-        const payload = await op.get<User>(url)
-
-
-        // const validate = dc.validateObject(payload, ['id'])
-
-        // if (validate.status !== 1) {
-        //     throw Error(validate.message)
-        // }
-        setState((v) => ({ ...v, ...payload }))
-
-        console.log('payload :>> ', payload);
-
-    }
-
-    let n = 100
-
-
-    function addNumberToFive(num: number) {
-        return 5
-    }
-
+    const [state, setState] = useState(new Date())
+    const [between, setBetween] = useState([new Date(), new Date('2024-01-22')])
+    const [calendar] = useState(
+        new swCalendar('#calendar', {
+            value: state,
+            nextDate: (res) => {
+                console.log('event ตอนกดเปลี่ยนวันที่ :>> ', res)
+            },
+        })
+    )
+    const [calendarBetween] = useState(
+        new swCalendarBetween('#calendarBetween', {
+            lang: 'th',
+            values: between,
+            style: {},
+            nextDate: (res) => {
+                console.log('event ตอนกดเปลี่ยนวันที่ :>> ', res)
+            },
+        })
+    )
 
     useEffect(() => {
-
-
-
-
-
-
-
-
-
-
-
-
+        calendar.render()
+        calendarBetween.render()
     }, [])
     return (
-        <>
-
-
-        </>
+        <section className=" flex justify-center items-center w-full h-[100dvh] bg-slate-500">
+            <div className=" bg-white mx-auto flex  justify-between p-4 gap-4 w-[600px] border border-slate-800">
+                <div id="calendar" className=" shadow"></div>
+                <div id="calendarBetween"></div>
+            </div>
+        </section>
     )
 }
 
-export default Page;
+export default Page
