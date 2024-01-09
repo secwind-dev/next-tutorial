@@ -48,45 +48,75 @@ function Page() {
         })
     )
 
-    function GenBox({ data }: any): any {
-        const gen = (payload: any) => {
+    function GenBox({ data, nameKey, className, suffixKey }: any): any {
+        const render = (payload: any) => {
             return Object.entries(payload as Record<string, any>).map(
                 ([key, value], i) => {
-                    // if (typeof value !== 'object') {
-                    const _val = typeof value == 'string' ? `"${value}"` : value
+                    const _comma =
+                        Object.keys(payload).length - 1 === i ? '' : ','
+
                     const checkString = ['string', 'number'].includes(
                         typeof value
                     )
-                    const checkObj = typeof value === 'object'
+                    const checkObj =
+                        typeof value === 'object' &&
+                        !Array.isArray(value) &&
+                        value !== null
+
                     return createElement(
                         'div',
-                        { className: 'pl-4' },
-                        checkString &&
-                            createElement('span', null, `${key}:${_val},`),
-                        checkObj &&
-                            createElement(
-                                'span',
-                                null,
-                                `${key}:`,
-                                GenBox({ data: value })
-                            )
+                        { className: 'pl-8' },
+                        checkString && generateStringNUmber(key, value, _comma),
+                        checkObj && generateObject(key, value, _comma)
+                        // Array.isArray(value) &&
+                        //     generateArray(key, value, _comma)
                     )
-                    // return createElement(
-                    //     'div',
-                    //     { className: 'pl-4' },
-                    //     createElement('span', null, `${key}:`),
-                    //     checkString && createElement('span', null, `${key}:${_val},`),
-                    //     checkObj && GenBox({ data: value })
-                    // )
                 }
             )
         }
+        const generateStringNUmber = (
+            key: string,
+            value: any,
+            comma: string
+        ) => {
+            const _val = typeof value == 'string' ? `"${value}"` : value
+            return createElement('span', null, `${key}: ${_val}${comma}`)
+        }
+        const generateObject = (key: string, value: any, comma: string) => {
+            return createElement(
+                'span',
+                null,
+
+                GenBox({ data: value || '', nameKey: key, suffixKey: comma })
+            )
+        }
+        // const generateArray = (key: string, value: any, comma: string) => {
+        //     return createElement(
+        //         'div',
+        //         {
+        //             className: `flex flex-col gap-1 ${
+        //                 className ? className : ''
+        //             }`,
+        //         },
+        //         createElement('span', null, nameKey ? `${nameKey}: [` : `[`),
+        //         GenBox({ data: value || '', nameKey: key, suffixKey: comma }),
+        //         createElement(
+        //             'span',
+        //             null,
+        //             `]${suffixKey ? (suffixKey as string) : ''}`
+        //         )
+        //     )
+        // }
         return createElement(
             'div',
-            { className: 'flex flex-col gap-1' },
-            createElement('span', null, `{`),
-            ...gen(data),
-            createElement('span', null, `}`)
+            { className: `flex flex-col gap-1 ${className ? className : ''}` },
+            createElement('span', null, nameKey ? `${nameKey}: {` : `{`),
+            ...render(data),
+            createElement(
+                'span',
+                null,
+                `}${suffixKey ? (suffixKey as string) : ''}`
+            )
         )
     }
 
@@ -96,10 +126,19 @@ function Page() {
         age: 15,
         email: 'test@test.com',
         like: {
-            // colors: ['red', 'blue', 'green'],
+            colors: ['red', 'blue', 'green'],
             price: 35000,
             animal: 'CAT',
+            profile: {
+                job: 'DEV',
+                salary: 20000,
+                name: {
+                    a: 'A',
+                    b: 100,
+                },
+            },
         },
+        cars: ['TOYOTA', 'HONDA', 'SUZUKI'],
     }
 
     useEffect(() => {
@@ -111,7 +150,9 @@ function Page() {
             <div className=" bg-white mx-auto flex  justify-between p-4 gap-4 w-[600px] border border-slate-800">
                 <div id="calendar" className=" shadow"></div>
                 <div id="calendarBetween"></div>
-                <GenBox data={res} />
+                <section className=" bg-slate-400 p-5 flex justify-center items-center w-[400px]">
+                    <GenBox data={res} className=" bg-red-500 w-full" />
+                </section>
             </div>
         </section>
     )
