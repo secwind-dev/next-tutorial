@@ -30,14 +30,14 @@ function Page() {
         return createElement('span', null, `${key}: ${_val}${comma}`)
     }
     function generateObject(key: string, value: any, comma: string) {
-        return GenBox({ data: value, key, comma })
+        return GenBox({ data: value, keyName: key, comma })
     }
     function generateArray(key: string, value: any, comma: string) {
         return createElement(
             'div',
             { className: `flex flex-col gap-1 ` },
             createElement('span', null, key ? `${key}: [` : `[`),
-            GenBox({ data: value }),
+            GenBox({ data: value, keyName: key, comma }),
             createElement('span', null, `]${comma ? (comma as string) : ''}`)
         )
     }
@@ -78,7 +78,7 @@ function Page() {
         }
     }
 
-    function GenBox({ data, className, comma, key }: any): any {
+    function GenBox({ data, className, comma, keyName }: any): any {
         function render() {
             if (Array.isArray(data)) {
                 return createElement(
@@ -88,7 +88,11 @@ function Page() {
                             className ? className : ''
                         }`,
                     },
-                    createElement('span', null, key ? `${key}: [` : `[`),
+                    createElement(
+                        'span',
+                        null,
+                        keyName ? `${keyName}: [` : `[`
+                    ),
                     ...generate(data),
                     createElement(
                         'span',
@@ -104,7 +108,11 @@ function Page() {
                             className ? className : ''
                         }`,
                     },
-                    createElement('span', null, key ? `${key}: {` : `{`),
+                    createElement(
+                        'span',
+                        null,
+                        keyName ? `${keyName}: {` : `{`
+                    ),
                     ...generate(data),
                     createElement(
                         'span',
@@ -112,7 +120,12 @@ function Page() {
                         `}${comma ? (comma as string) : ''}`
                     )
                 )
-            } else return createElement('span', null, `${key}: ${data}${comma}`)
+            } else
+                return createElement(
+                    'span',
+                    null,
+                    `${keyName}: ${data}${comma}`
+                )
         }
 
         return render()
@@ -121,7 +134,11 @@ function Page() {
     return (
         <section className=" flex justify-center items-center w-full h-[100dvh] bg-slate-500">
             <section className=" bg-slate-400 p-5 flex justify-center items-center w-[400px]">
-                <GenBox data={res} className=" bg-red-500 w-full" />
+                <GenBox
+                    data={res}
+                    className=" bg-red-500 w-full"
+                    keyName="max"
+                />
             </section>
         </section>
     )
