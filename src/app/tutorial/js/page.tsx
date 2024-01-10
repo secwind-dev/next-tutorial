@@ -25,110 +25,50 @@ function Page() {
         cars: ['TOYOTA', 'HONDA', 'SUZUKI'],
     }
 
-    function generateStringNUmber(key: string, value: any, comma: string) {
-        const _val = typeof value == 'string' ? `"${value}"` : value
-        return createElement('span', null, `${key}: ${_val}${comma}`)
-    }
-    function generateObject(key: string, value: any, comma: string) {
-        return GenBox({ data: value, keyName: key, comma })
-    }
-    function generateArray(key: string, value: any, comma: string) {
-        return createElement(
-            'div',
-            { className: `flex flex-col gap-1 ` },
-            createElement('span', null, key ? `${key}: [` : `[`),
-            GenBox({ data: value, keyName: key, comma }),
-            createElement('span', null, `]${comma ? (comma as string) : ''}`)
+    function createTags(data: any) {
+        return Object.entries(data as Record<string, any>).map(
+            ([key, value], i) => {
+                console.log('key :>> ', typeof key)
+                console.log('value :>> ', value)
+                const comma = Object.keys(data).length - 1 === i ? '' : ','
+                return createElement(
+                    'div',
+                    { className: 'pl-8' },
+                    GenBox({ data: value, keyName: key, comma })
+                )
+            }
         )
     }
 
-    function generate(data: any) {
-        console.log('TYPE :>> ', typeof data)
-        if (Array.isArray(data)) {
-            console.log('xxxx :>> ')
-            return data.map((v, i) => {
-                console.log('isArray :>> ', v)
-                const _comma = data.length - 1 === i ? '' : ','
-
-                return GenBox({ data: v, suffixKey: _comma })
-            })
-        } else {
-            return Object.entries(data as Record<string, any>).map(
-                ([key, value], i) => {
-                    const _comma = Object.keys(data).length - 1 === i ? '' : ','
-
-                    const checkString = ['string', 'number'].includes(
-                        typeof value
-                    )
-                    const checkObj =
-                        typeof value === 'object' &&
-                        !Array.isArray(value) &&
-                        value !== null
-
-                    return createElement(
-                        'div',
-                        { className: 'pl-8' },
-                        checkString && generateStringNUmber(key, value, _comma),
-                        checkObj && generateObject(key, value, _comma)
-                        // Array.isArray(value) &&
-                        //     generateArray(key, value, _comma)
-                    )
-                }
+    function GenBox({
+        data,
+        className = '',
+        comma = '',
+        keyName = '',
+    }: any): any {
+        if (typeof data === 'object' && data !== null) {
+            const startTag = Array.isArray(data)
+                ? keyName
+                    ? `${keyName}: [`
+                    : `[`
+                : keyName
+                ? `${keyName}: {`
+                : `{`
+            const endTag = Array.isArray(data) ? ']' : `}${comma}`
+            return createElement(
+                'div',
+                {
+                    className: `flex flex-col gap-1 ${className}`,
+                },
+                createElement('span', null, startTag),
+                ...createTags(data),
+                createElement('span', null, endTag)
             )
         }
-    }
-
-    function GenBox({ data, className, comma, keyName }: any): any {
-        function render() {
-            if (Array.isArray(data)) {
-                return createElement(
-                    'div',
-                    {
-                        className: `flex flex-col gap-1 ${
-                            className ? className : ''
-                        }`,
-                    },
-                    createElement(
-                        'span',
-                        null,
-                        keyName ? `${keyName}: [` : `[`
-                    ),
-                    ...generate(data),
-                    createElement(
-                        'span',
-                        null,
-                        `]${comma ? (comma as string) : ''}`
-                    )
-                )
-            } else if (typeof data === 'object' && data !== null) {
-                return createElement(
-                    'div',
-                    {
-                        className: `flex flex-col gap-1 ${
-                            className ? className : ''
-                        }`,
-                    },
-                    createElement(
-                        'span',
-                        null,
-                        keyName ? `${keyName}: {` : `{`
-                    ),
-                    ...generate(data),
-                    createElement(
-                        'span',
-                        null,
-                        `}${comma ? (comma as string) : ''}`
-                    )
-                )
-            } else
-                return createElement(
-                    'span',
-                    null,
-                    `${keyName}: ${data}${comma}`
-                )
-        }
-
-        return render()
+        const valOfString = typeof data == 'string' ? `"${data}"` : data
+        if (typeof keyName == 'string')
+            return createElement('span', null, `${keyName}: ${data}${comma}`)
+        return createElement('span', null, valOfString)
     }
 
     return (
