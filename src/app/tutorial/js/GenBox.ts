@@ -3,8 +3,6 @@ import { createElement } from 'react'
 function createTags(data: any) {
     return Object.entries(data as Record<string, any>).map(
         ([key, value], i) => {
-            console.log('key :>> ', typeof key)
-            console.log('value :>> ', value)
             const comma = Object.keys(data).length - 1 === i ? '' : ','
             return createElement(
                 'div',
@@ -14,13 +12,21 @@ function createTags(data: any) {
         }
     )
 }
-export function GenBox({
+export default function GenBox({
     data,
     className = '',
     comma = '',
     keyName = '',
 }: any): any {
-    if (typeof data === 'object' && data !== null) {
+    if (data instanceof Date) {
+        const d = data as Date
+        const date = `'${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}'`
+        return createElement(
+            'span',
+            null,
+            `${keyName}: new Date(${date})${comma}`
+        )
+    } else if (typeof data === 'object' && data !== null) {
         const startTag = Array.isArray(data)
             ? keyName
                 ? `${keyName}: [`
@@ -38,9 +44,11 @@ export function GenBox({
             ...createTags(data),
             createElement('span', null, endTag)
         )
+    } else if (!Number.isInteger(+keyName)) {
+        const _val = typeof data == 'string' ? `"${data}"` : data
+        return createElement('span', null, `${keyName}: ${_val + comma}`)
     }
     const valOfString = typeof data == 'string' ? `"${data}"` : data
-    if (typeof keyName == 'string')
-        return createElement('span', null, `${keyName}: ${data}${comma}`)
-    return createElement('span', null, valOfString)
+
+    return createElement('span', null, valOfString + comma)
 }

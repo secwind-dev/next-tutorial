@@ -1,5 +1,5 @@
 'use client'
-import { GenBox } from './GenBox'
+import GenBox from './GenBox'
 
 function Page() {
     const res = {
@@ -21,6 +21,7 @@ function Page() {
             },
         },
         cars: ['TOYOTA', 'HONDA', 'SUZUKI'],
+        value: new Date(),
     }
 
     return (
