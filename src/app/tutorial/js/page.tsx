@@ -26,8 +26,8 @@ function Page() {
         },
         key: 'Max',
         // prefix: '(',
-        // suffix: ')',
-        name: 'const calendar = new Calendar',
+        suffix: ')',
+        name: 'const calendar = new Calendar (',
     }
 
     return (

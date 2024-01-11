@@ -34,11 +34,12 @@ export default function GenBox({ data, className = '' }: Props): any {
         return createElement('span', null, `${key}: new Date(${date})${comma}`)
     } else if (typeof value === 'object' && value !== null) {
         // ถ้า value = array | object
-        // const startTag = name + key + Array.isArray(value) ? '[' : '{'
         const sTag = Array.isArray(value) ? '[' : '{'
+        const lTag = Array.isArray(value) ? ']' : '}'
+        const title = name ? name : key ? `${key}:` : ''
         console.log('key :>> ', key)
-        const startTag = `${key}: ${sTag}`
-        const endTag = Array.isArray(value) ? ']' : '}' + comma
+        const startTag = `${title} ${sTag}`
+        const endTag = lTag + comma
         const props = {
             className: `flex flex-col gap-1 ${className}`,
         }
