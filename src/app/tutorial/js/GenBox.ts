@@ -1,54 +1,59 @@
 import { createElement } from 'react'
-
-function createTags(data: any) {
-    return Object.entries(data as Record<string, any>).map(
-        ([key, value], i) => {
-            const comma = Object.keys(data).length - 1 === i ? '' : ','
-            return createElement(
-                'div',
-                { className: 'pl-8' },
-                GenBox({ data: value, keyName: key, comma })
-            )
-        }
-    )
-}
-export default function GenBox({
-    data,
-    className = '',
-    comma = '',
-    keyName = '',
-}: any): any {
-    if (data instanceof Date) {
-        const d = data as Date
-        const date = `'${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}'`
-        return createElement(
-            'span',
-            null,
-            `${keyName}: new Date(${date})${comma}`
-        )
-    } else if (typeof data === 'object' && data !== null) {
-        const startTag = Array.isArray(data)
-            ? keyName
-                ? `${keyName}: [`
-                : `[`
-            : keyName
-            ? `${keyName}: {`
-            : `{`
-        const endTag = Array.isArray(data) ? ']' : `}${comma}`
-        return createElement(
-            'div',
-            {
-                className: `flex flex-col gap-1 ${className}`,
-            },
-            createElement('span', null, startTag),
-            ...createTags(data),
-            createElement('span', null, endTag)
-        )
-    } else if (!Number.isInteger(+keyName)) {
-        const _val = typeof data == 'string' ? `"${data}"` : data
-        return createElement('span', null, `${keyName}: ${_val + comma}`)
+type Props = {
+    data: {
+        value?: any
+        comma?: string
+        key?: string
+        prefix?: string
+        suffix?: string
+        name?: string
     }
-    const valOfString = typeof data == 'string' ? `"${data}"` : data
+    className?: string
+}
+
+function createTags(data: Record<string, any>) {
+    return Object.entries(data).map(([key, value], i) => {
+        const comma = Object.keys(data).length - 1 === i ? '' : ','
+        const props = { className: 'pl-8' }
+        const children = [GenBox({ data: { value, key, comma } })]
+        return createElement('div', props, ...children)
+    })
+}
+export default function GenBox({ data, className = '' }: Props): any {
+    const {
+        value,
+        key = '',
+        comma = '',
+        prefix = '',
+        suffix = '',
+        name = '',
+    } = data
+    if (value instanceof Date) {
+        const d = value as Date
+        const date = `'${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}'`
+        return createElement('span', null, `${key}: new Date(${date})${comma}`)
+    } else if (typeof value === 'object' && value !== null) {
+        // ถ้า value = array | object
+        // const startTag = name + key + Array.isArray(value) ? '[' : '{'
+        const sTag = Array.isArray(value) ? '[' : '{'
+        console.log('key :>> ', key)
+        const startTag = `${key}: ${sTag}`
+        const endTag = Array.isArray(value) ? ']' : '}' + comma
+        const props = {
+            className: `flex flex-col gap-1 ${className}`,
+        }
+        const children = [
+            createElement('span', null, prefix + startTag),
+            ...createTags(value),
+            createElement('span', null, endTag + suffix),
+        ]
+        return createElement('div', props, ...children)
+    } else if (!Number.isInteger(+key)) {
+        // ถ้า key เป็นตัวเลข
+        const _val = typeof value == 'string' ? `"${value}"` : value
+        return createElement('span', null, `${key}: ${_val + comma}`)
+    }
+    const valOfString = typeof value == 'string' ? `"${value}"` : value
 
     return createElement('span', null, valOfString + comma)
 }
