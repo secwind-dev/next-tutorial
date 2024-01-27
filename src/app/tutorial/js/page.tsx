@@ -1,40 +1,21 @@
-'use client'
-import GenBox from './GenBox'
-
+import { values } from '@/types'
+import { pipe } from 'fp-ts/function'
 function Page() {
-    const res = {
-        value: {
-            username: 'username',
-            name: 'Max',
-            age: 15,
-            email: 'test@test.com',
-            like: {
-                colors: ['red', 'blue', 'green'],
-                price: 35000,
-                animal: 'CAT',
-                profile: {
-                    job: 'DEV',
-                    salary: 20000,
-                    name: {
-                        a: 'A',
-                        b: 100,
-                    },
-                },
-            },
-            cars: ['TOYOTA', 'HONDA', 'SUZUKI'],
-            value: new Date(),
-        },
-        key: 'Max',
-        // prefix: '(',
-        suffix: ')',
-        name: 'const calendar = new Calendar (',
-    }
+    const len = (s: string): number => s.length
+    const double = (n: number): number => n * 2
+    const x = pipe('hello', len, double)
+
+    const sum = (a: number) => (b: number) => a * b
+
+    const withNumber = sum(15)
+
+    const fn = values('hello', len, double, withNumber)
+
+    console.log('object :>> ', fn)
 
     return (
         <section className=" flex justify-center items-center w-full h-[100dvh] bg-slate-500">
-            <section className=" bg-slate-400 p-5 flex justify-center items-center w-[400px]">
-                <GenBox data={res} className="bg-red-500 w-full" />
-            </section>
+            <section className=" bg-slate-400 p-5 flex justify-center items-center w-[400px]"></section>
         </section>
     )
 }
